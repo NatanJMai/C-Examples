@@ -1,3 +1,7 @@
+/* Natan J. Mai
+ * Last In First Out (LIFO)
+ * */
+
 typedef struct node{
   struct node* prev;
   struct node* next;
