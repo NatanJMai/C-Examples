@@ -9,10 +9,15 @@ typedef struct{
   node *first;
   node *last;
   int  qtd;
+  int  id;
 } stack;
 
-stack * initStack(){
-  return (stack *) malloc(sizeof(stack));
+stack * initStack(int id){
+  stack *s;
+
+  s = malloc(sizeof(stack));
+  s->id = id;
+  return s;
 }
 
 node * initNode(char *n, int i){
@@ -25,7 +30,7 @@ node * initNode(char *n, int i){
   return nd;
 }
 
-node * pop(stack *st){
+void pop(stack *st){
   node *f, *aux;
 
   f = st->first;
@@ -38,22 +43,20 @@ node * pop(stack *st){
 
   f->next = NULL;
   f->prev = NULL;
-
-  return f;
 }
 
-int push(stack *st, node *nd){
+void push(stack *st, node *nd){
   node *first = st->first;
   node *aux;
 
-  if(first == NULL){
+  if(st->qtd <= 0){
     st->first = nd;
     st->last  = nd;
     
     nd->prev = NULL;
     nd->next = NULL;
-    st->qtd++;
-    return 1;
+    st->qtd = 1;
+    return;
   }
 
   aux = st->first;
@@ -65,7 +68,7 @@ int push(stack *st, node *nd){
   
   st->first = nd;
   st->qtd++;
-  return 1;
+  return;
 }
 
 void print(stack *st){
@@ -74,7 +77,7 @@ void print(stack *st){
 
   n = st->first;
   l = st->last;
-  
+
   while(i < st->qtd){
     printf("NAME -> %s | ID -> %d\n", n->name, n->id);
     n = n->next;
@@ -82,20 +85,68 @@ void print(stack *st){
   }
 }
 
-int test001(){
+int test001(stack *s){
   int i;
   node  *n;
-  stack *s = initStack();
+//  stack *s = initStack(0);
   
-  for(i = 0; i < 100; i++){
+  for(i = 0; i < 20; i++){
     n = initNode("natan", i);
     push(s, n);
   }
+
+  for(i = 0; i < 5; i++)
+    pop(s);
  
   print(s);
+  free(s);
+  free(n);
+}
+
+int test002(stack *q){
+  int i;
+  node *t;
+//  stack *q = initStack(1);
+
+  for(i = 0; i < 2; i++){
+    t = initNode("natan", i);
+    push(q, t);
+  }
+
+  for(i = 0; i < 1; pop(q), i++);
+
+  print(q);
+  free(q);
+  free(t);
+}
+
+int test003(stack *j){
+  int i;
+  node *n;
+
+  for(i = 0; i < 22; i++){
+    n = initNode("natan", i);
+    push(j, n);
+  }
+
+  for(i = 0; i < 10; pop(j), i++);
+  print(j);
+  free(j);
+  free(n);
 }
 
 int runTest(){
-  test001();
+  stack *s, *t, *q;
+
+  s = initStack(1);
+  t = initStack(2);
+  q = initStack(3);
+
+  test001(s);
+  printf("\n-------TEST 002-----------\n");
+  test002(t);
+  printf("\n-------TEST 003-----------\n");
+  test003(q);
+  
 
 }
